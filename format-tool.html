@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🧹 JSON Code Formatter</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #fdf6e3; color: #333; }
+    textarea, input { width: 100%; padding: 10px; margin: 10px 0; font-family: monospace; }
+    button { padding: 10px 20px; margin: 5px; }
+    pre { background: #eee; padding: 10px; white-space: pre-wrap; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>🛠 JSON Code Formatter Tool</h1>
+
+  <label for="codeTitle">Snippet Title:</label>
+  <input id="codeTitle" placeholder="e.g., Merge Sort" />
+
+  <label for="inputCode">Paste your code here:</label>
+  <textarea id="inputCode" rows="10" placeholder="Paste raw JS code here..."></textarea>
+
+  <button onclick="formatCode()">🧼 Format Code</button>
+  <button onclick="convertToJSONString()">🔁 Convert to JSON</button>
+
+  <h2>Formatted Code:</h2>
+  <pre id="formattedCode"></pre>
+
+  <h2>JSON Snippet:</h2>
+  <pre id="jsonOutput"></pre>
+
+  <script>
+    function formatCode() {
+      const code = document.getElementById('inputCode').value;
+      try {
+        const formatted = js_beautify(code);  // Uses js-beautify
+        document.getElementById('formattedCode').textContent = formatted;
+      } catch (e) {
+        document.getElementById('formattedCode').textContent = '❌ Format Error: ' + e.message;
+      }
+    }
+
+    function convertToJSONString() {
+      const code = document.getElementById('formattedCode').textContent || document.getElementById('inputCode').value;
+      const title = document.getElementById('codeTitle').value || 'Untitled';
+      const escaped = code.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+      const jsonSnippet = `{\n  "title": "${title}",\n  "code": "${escaped}"\n}`;
+      document.getElementById('jsonOutput').textContent = jsonSnippet;
+    }
+  </script>
+
+  <!-- js-beautify CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.7/js/lib/beautify.min.js"></script>
+</body>
+</html>
